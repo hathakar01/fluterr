@@ -1,0 +1,202 @@
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:extrnal_exam/main.dart';
+import 'dart:convert';
+
+void main() => runApp(MyApp());
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      theme: ThemeData(),
+      title: "Part 2",
+     debugShowCheckedModeBanner: false,
+      home: DefaultTabController(
+        length: 2,
+        child: TabBarView(
+          children: [img(), lsv()],
+        ),
+      ),
+    );
+  }
+}
+
+class img extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    Row r1 = Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Container(
+          height: 150,
+          width: 300,
+          child: Image.asset("assets/image1.png"),
+        )
+      ],
+    );
+    Row r2 = Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Container(
+          height: 150,
+          width: 300,
+          child: Image.asset("assets/image2.png"),
+        )
+      ],
+    );
+    Row r3 = Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Container(
+          height: 150,
+          width: 300,
+          child: Image.asset("assets/image3.png"),
+        )
+      ],
+    );
+    Row r4 = Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Container(
+          height: 50,
+          width: 300,
+          child: Image.network(
+              "https://cdn.onlinewebfonts.com/svg/download_275971.png"),
+        )
+      ],
+    );
+    Column c1 = Column(
+      children: [r1, r2, r3, r4],
+    );
+    Scaffold s1 = Scaffold(
+
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            DrawerHeader(
+              child: Text('Drawer Header'),
+              decoration: BoxDecoration(
+                color: Colors.blue,
+              ),
+            ),
+            ListTile(
+              title: Text('Part 1'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => WelcomePage()),
+                );
+              },
+            ),
+            ListTile(
+              title: Text('Close'),
+              onTap: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        ),
+      ),
+      appBar: AppBar(
+        bottom: TabBar(
+          tabs: [
+            Tab(icon: Icon(Icons.image), text: "image"),
+            Tab(icon: Icon(Icons.list_rounded), text: "list"),
+          ],
+        ),
+      ),
+      body: c1,
+    );
+    return s1;
+  }
+}
+
+class lsv extends StatefulWidget {
+  lsview createState() => lsview();
+}
+
+class lsview extends State<lsv> {
+  Uri url = Uri.parse("https://randomuser.me/api/?results=10");
+
+  late List data;
+  bool _isDataLoading = true;
+
+  Future<List> _getUsers() async {
+    var response = await http.get(url, headers: {"Accept": "application/json"});
+
+    setState(() {
+      var listData = json.decode(response.body);
+      data = listData['results'];
+
+      _isDataLoading = false;
+    });
+    return data;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    _getUsers();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        drawer: Drawer(
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: <Widget>[
+              DrawerHeader(
+                child: Text('Drawer Header'),
+                decoration: BoxDecoration(
+                  color: Colors.blue,
+                ),
+              ),
+              ListTile(
+                title: Text('Part 1'),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => WelcomePage()),
+                  );
+                },
+              ),
+
+              ListTile(
+                title: Text('Close'),
+                onTap: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          ),
+        ),
+        appBar: AppBar(
+          bottom: TabBar(
+            tabs: [
+              Tab(icon: Icon(Icons.image), text: "image"),
+              Tab(icon: Icon(Icons.list_rounded), text: "list"),
+            ],
+          ),
+        ),
+        body: _isDataLoading
+            ? Center(child: CircularProgressIndicator())
+            : ListView.builder(
+                itemCount: data == null ? 0 : data.length,
+                itemBuilder: (BuildContext context, index) {
+                  return ListTile(
+                    title: Text(data[index]['name']['first'] +
+                        " " +
+                        data[index]['name']['last']),
+                    subtitle: Text(data[index]['email']),
+                    leading: CircleAvatar(
+                      backgroundImage:
+                          NetworkImage(data[index]['picture']['thumbnail']),
+                    ),
+                  );
+                }));
+  }
+}

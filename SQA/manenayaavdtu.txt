@@ -1,0 +1,241 @@
+import 'package:flutter/material.dart';
+
+void main() => runApp(MyApp());
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return MaterialApp(
+      theme: ThemeData(),
+      debugShowCheckedModeBanner: false,
+      title: "flutter Application",
+      home: Login(),
+    );
+  }
+}
+
+class Login extends StatefulWidget {
+  @override
+  Login_Ui createState() => Login_Ui();
+}
+
+class Login_Ui extends State<Login> {
+  @override
+  String u1 = "Akshar";
+  String p = "Akshar@123";
+  Widget build(BuildContext context) {
+    TextEditingController uname = TextEditingController();
+    TextEditingController pass = TextEditingController();
+    Row R1 = Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Container(
+          width: 500,
+          child: TextField(
+            controller: uname,
+            decoration: InputDecoration(hintText: "enter username "),
+          ),
+        ),
+      ],
+    );
+    Row R2 = Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Container(
+          width: 500,
+          margin: EdgeInsets.symmetric(vertical: 20),
+          child: TextField(
+            controller: pass,
+            decoration: InputDecoration(hintText: "enter Password "),
+          ),
+        ),
+      ],
+    );
+
+    Row R3 = Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Container(
+            child: ElevatedButton(
+          onPressed: () {
+            String un = uname.text;
+            String password = pass.text;
+            if (un == u1 && password == p) {
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => weclcome()));
+            }
+          },
+          child: Text("submit"),
+        )),
+      ],
+    );
+    Column c1 = Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [R1, R2, R3],
+    );
+    Scaffold s1 = Scaffold(
+      body: c1,
+    );
+    return s1;
+  }
+}
+
+class weclcome extends StatefulWidget {
+  WelcomePage createState() => WelcomePage();
+}
+
+class WelcomePage extends State<weclcome> {
+  String _selectedOption = '';
+
+  @override
+  Widget build(BuildContext context) {
+    TextEditingController id = TextEditingController();
+    TextEditingController n = TextEditingController();
+    TextEditingController age = TextEditingController();
+    Row r1 = Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Container(
+          padding: EdgeInsets.symmetric(horizontal: 16),
+          width: 800,
+          margin: EdgeInsets.symmetric(vertical: 15),
+          child: TextField(
+            controller: n,
+            decoration: InputDecoration(hintText: "enter your Name "),
+          ),
+        ),
+      ],
+    );
+    Row r2 = Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Container(
+          padding: EdgeInsets.symmetric(horizontal: 16),
+          width: 800,
+          margin: EdgeInsets.symmetric(vertical: 15),
+          child: TextField(
+            controller: id,
+            decoration: InputDecoration(hintText: "enter your id "),
+          ),
+        ),
+      ],
+    );
+    Row r3 = Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Container(
+          padding: EdgeInsets.symmetric(horizontal: 16),
+          width: 800,
+          margin: EdgeInsets.symmetric(vertical: 15),
+          child: TextField(
+            controller: age,
+            decoration: InputDecoration(hintText: "enter your age "),
+          ),
+        ),
+      ],
+    );
+    Column r4 = Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+
+        Container(
+          child:
+         RadioListTile<String>(
+          title: Text('male'),
+          value: 'male',
+          groupValue: _selectedOption,
+          activeColor: Colors.deepPurpleAccent,
+          onChanged: (value) {
+            setState(() {
+              _selectedOption = value!;
+
+            });
+          },
+        ),
+        ),
+        Container(child:
+        RadioListTile<String>(
+          title: Text('female'),
+          value: 'female',
+          groupValue: _selectedOption,
+          activeColor: Colors.deepPurpleAccent,
+          onChanged: (value) {
+            setState(() {
+              _selectedOption = value!;
+
+            });
+          },
+        ),
+        ),
+      ],
+    );
+    Row r5 = Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Container(
+            child: ElevatedButton(
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(
+                builder: (context) =>NexNextScreen(n.text,age.text,id.text,_selectedOption)
+
+
+
+                ),
+
+                );
+
+              },
+              child: Text("submit"),
+            )),
+      ],
+    );
+
+    Column c1=Column(mainAxisAlignment: MainAxisAlignment.center,
+      children: [r1,r2,r3,r4,r5]);
+
+
+
+
+
+   Scaffold S1=Scaffold(body: c1,);
+    return S1;
+  }
+}
+
+class NexNextScreen extends StatelessWidget {
+   String n="";
+   String id="";
+   String age="";
+   String _selectedOption="";
+   NexNextScreen(this.n, this.age, this.id,this._selectedOption);
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    Container c1=Container(
+      color: Colors.white,
+      padding: EdgeInsets.all(20.0),
+      child: Table(
+        border: TableBorder.all(color: Colors.black),
+        children: [
+          TableRow( children: [
+            Text('id'),
+            Text('name'),
+            Text('age'),
+            Text('gender'),
+
+          ]),
+          TableRow(children: [
+            Text(id),
+            Text(n),
+            Text(age),
+            Text(_selectedOption),
+          ])
+        ],
+      ),
+    );
+        Scaffold s1=Scaffold(body: c1,);
+        return s1;
+  }
+}
+

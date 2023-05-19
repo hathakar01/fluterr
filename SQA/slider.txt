@@ -1,0 +1,129 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.lightGreen,
+      ),
+      home: MyHomePage(title: 'Set-4 slider max Number'),
+    );
+  }
+}
+
+class MyHomePage extends StatefulWidget {
+  MyHomePage({Key? key, required this.title}) : super(key: key);
+
+  final String title;
+
+  @override
+  _MyHomePageState createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  double _a = 1;
+  double _b = 1;
+  double _c = 1;
+
+  void _showMax() {
+    double max = _a > _b ? _a : _b;
+    max = max > _c ? max : _c;
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Maximum value',),
+          backgroundColor: Colors.white,
+          content: Text('The maximum value is : $max'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('ok'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.title),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              'Select values for a, b and c:',
+            ),
+            SizedBox(height: 20),
+            Slider(
+              value: _a,
+              min: 1,
+              max: 5,
+              divisions: 4,
+              label: _a.toString(),
+              onChanged: (value) {
+                setState(() {
+                  _a = value;
+                });
+              },
+            ),
+            Text(
+              'Value of a: ${_a.toInt()}',
+            ),
+            SizedBox(height: 20),
+            Slider(
+              value: _b,
+              min: 1,
+              max: 5,
+              divisions: 4,
+              label: _b.toString(),
+              onChanged: (value) {
+                setState(() {
+                  _b = value;
+                });
+              },
+            ),
+            Text(
+              'Value of b: ${_b.toInt()}',
+            ),
+            SizedBox(height: 20),
+            Slider(
+              value: _c,
+              min: 1,
+              max: 5,
+              divisions: 4,
+              label: _c.toString(),
+              onChanged: (value) {
+                setState(() {
+                  _c = value;
+                });
+              },
+            ),
+            Text(
+              'Value of c: ${_c.toInt()}',
+            ),
+            SizedBox(height: 30),
+            ElevatedButton(
+              onPressed: _showMax,
+              child: Text('Show Max'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
